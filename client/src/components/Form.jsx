@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify'; // ✅ import toastify
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const Form = () => {
+    const navigate = useNavigate(); // ✅ initialize navigat
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -70,31 +74,96 @@ const Form = () => {
         }
     };
 
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         try {
             const response = await axios.post('http://localhost:3500/form', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
-    
-            console.log('Response status:', response.status);  // Log the status
-    
-            if (response.status === 200) {
-                alert('Form submitted successfully!');
+
+            if (response.status === 200 || response.status === 201) {
+                toast.success('Form submitted successfully!', {
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setFormData({
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    phone: '',
+                    age: '',
+                    gender: '',
+                    height: '',
+                    weight: '',
+                    goal: '',
+                    medicalConditions: '',
+                    medications: '',
+                    allergies: '',
+                    physicalActivityLevel: '',
+                    mealPreferences: '',
+                    dailyMeals: '',
+                    snacks: '',
+                    specialDiet: '',
+                    stressLevel: '',
+                    sleepPattern: '',
+                    familyHistory: [],
+                    additionalNotes: '',
+                    dob: '',
+                    address: '',
+                    city: '',
+                    state: '',
+                    country: '',
+                    dietPlan: '',
+                    medicalDiagnosis: '',
+                    surgicalHistory: '',
+                    isPregnant: '',
+                    planningConception: '',
+                    pastDietProgram: '',
+                    takenDietPills: '',
+                    pillsDuration: '',
+                    pillsType: '',
+                    weightLoss: '',
+                    weightGain: '',
+                    otherFamilyHistory: ''
+                });
+
+                setTimeout(() => {
+                    navigate('/'); // ✅ redirect back to landing after 3 sec
+                }, 4000);
             }
         } catch (error) {
             console.error('Error submitting the form:', error);
-            alert('Error submitting the form. Please try again.');
+            toast.error('Error submitting the form. Please try again.', {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
     };
-    
+
+    const handleBack = () => {
+        navigate('/'); 
+    };
+
 
     return (
         <div className="container">
-            <form onSubmit={handleSubmit} className="form-card p-4 rounded-3 mt-0" method='post' action={'/form'}>
+                    <ToastContainer />
+            <form onSubmit={handleSubmit} className="form-card p-4 rounded-3 mt-0" >
                 <h2 className="text-center mb-5 fw-bold" style={{ color: "black" }}>Welcome to Your Nutrition Consultation!</h2>
 
                 {/* Personal Information Section */}
@@ -265,7 +334,7 @@ const Form = () => {
                         value={formData.allergies}
                         onChange={handleChange}
                     />
-                                        <textarea
+                    <textarea
                         className="form-control shadow-sm mb-3"
                         rows="4"
                         placeholder="Medical Diagnosis"
@@ -485,8 +554,13 @@ const Form = () => {
                     />
                 </div>
 
-                <div className="d-flex justify-content-end">
-                    <button type="submit" className="btn btn-warning px-4 py-2">Submit</button>
+                <div className="d-flex justify-content-between">
+                    <button type="button" className="btn btn-dark px-4 py-2" onClick={handleBack}>
+                        Back
+                    </button>
+                    <button type="submit" className="btn btn-warning px-4 py-2">
+                        Submit
+                    </button>
                 </div>
             </form>
         </div>
@@ -494,12 +568,3 @@ const Form = () => {
 };
 
 export default Form;
-
-
-
-
-
-
-
-
-
