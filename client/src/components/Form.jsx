@@ -164,7 +164,7 @@ const Form = () => {
         <div className="container">
                     <ToastContainer />
             <form onSubmit={handleSubmit} className="form-card p-4 rounded-3 mt-0" >
-                <h2 className="text-center mb-5 fw-bold" style={{ color: "black" }}>Welcome to Your Nutrition Consultation!</h2>
+                <h2 className="text-center mb-5 fw-bold" style={{ color: "black", textDecorationLine:'underline' }}>Welcome to Your Nutrition Consultation!</h2>
 
                 {/* Personal Information Section */}
                 <div className="section mb-4 p-4">
