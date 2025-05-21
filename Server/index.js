@@ -14,9 +14,9 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const port = process.env.PORT || 3600;
-const MONGODB_URI = process.env.URI;
+const uri = process.env.URI;
 
-mongoose.connect(MONGODB_URI)
+mongoose.connect(uri)
     .then(() => {
         console.log('Mongodb connected');
     })
