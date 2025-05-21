@@ -14,15 +14,21 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const port = process.env.PORT || 3600;
-const uri = process.env.URI;
+const MONGODB_URI = process.env.URI;
 
-mongoose.connect(uri)
+mongoose.connect(MONGODB_URI)
     .then(() => {
         console.log('Mongodb connected');
     })
     .catch((err) => {
         console.log(err);
     });
+
+
+app.get('/form', (req, res) => {
+    res.sendFile(path.join(__dirname, '/form'));
+});
+
 
 
 app.post('/form', async (req, res) => {
@@ -38,7 +44,7 @@ app.post('/form', async (req, res) => {
             }
         });
 
-        const mailOptions = { 
+        const mailOptions = {
             from: process.env.EMAIL_USER,
             to: 'carolineajiboye12@gmail.com, medicdietclinic@gmail.com',
             subject: 'New Patient Form Submitted',
@@ -100,7 +106,7 @@ app.post('/form', async (req, res) => {
 </body>
 
             `
-        
+
         };
 
         await transporter.sendMail(mailOptions);
