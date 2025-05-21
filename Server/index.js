@@ -1,43 +1,50 @@
+const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
-const FormData = require('../model/FormData');
+const FormData = require('./model/FormData');
+const punycode = require('punycode/');
 require('dotenv').config();
+const app = express();
 
-let conn = null;
 
-async function connectToDatabase() {
-  if (conn == null) {
-    conn = await mongoose.connect(process.env.URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
-  }
-}
+app.use(express.json());
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
-  }
+const port = process.env.PORT || 3600;
+const uri = process.env.URI;
 
-  try {
-    await connectToDatabase();
-
-    const formData = new FormData(req.body);
-    await formData.save();
-
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.USER,
-        pass: process.env.PASS
-      }
+mongoose.connect(uri)
+    .then(() => {
+        console.log('Mongodb connected');
+    })
+    .catch((err) => {
+        console.log(err);
     });
 
-    const mailOptions = {
-      from: process.env.USER,
-      to: 'carolineajiboye12@gmail.com, medicdietclinic@gmail.com',
-      subject: 'New Patient Form Submitted',
-      html: `<body style="font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 0;">
+
+app.post('/form', async (req, res) => {
+    try {
+        const formData = new FormData(req.body);
+        await formData.save();
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.USER,
+                pass: process.env.PASS
+            }
+        });
+
+        const mailOptions = { 
+            from: process.env.EMAIL_USER,
+            to: 'carolineajiboye12@gmail.com, medicdietclinic@gmail.com',
+            subject: 'New Patient Form Submitted',
+            text: `New form submission from ${formData.firstName} ${formData.lastName}.`,
+            html: `
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 0;">
     <div style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
         <!-- Header -->
         <div style="text-align: center; padding-bottom: 20px;">
@@ -91,14 +98,24 @@ module.exports = async (req, res) => {
         </div>
     </div>
 </body>
-`
-    };
 
-    await transporter.sendMail(mailOptions);
-    res.status(200).json({ message: 'Form submitted and email sent!', data: formData });
+            `
+        
+        };
 
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error submitting form', error: err.message });
-  }
-};
+        await transporter.sendMail(mailOptions);
+        console.log('Email sent successfully!');
+        res.status(200).json({ message: 'Form submitted and email sent successfully!', data: formData });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Something went wrong", error: error.message });
+    }
+});
+
+
+
+
+app.listen(port, () => {
+    console.log(`Server is running at: ${port}`);
+});
