@@ -80,7 +80,7 @@ const Form = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:3500/form', formData, {
+            const response = await axios.post('https://medicdietclinic-backendd.onrender.com/form', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
