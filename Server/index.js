@@ -111,6 +111,7 @@ app.post('/form', async (req, res) => {
 
         await transporter.sendMail(mailOptions);
         console.log('Email sent successfully!');
+        console.log(req.body);
         res.status(200).json({ message: 'Form submitted and email sent successfully!', data: formData });
 
     } catch (error) {

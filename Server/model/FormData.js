@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const formSchema = new mongoose.Schema({
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    email: { type: String, required: true },
-    phone: { type: String, required: true },
-    age: { type: Number, required: true },
-    dob: { type: Date, required: true },
+    firstName: { type: String},
+    lastName: { type: String},
+    email: { type: String},
+    phone: { type: String},
+    age: { type: Number},
+    dob: { type: Date},
     address: { type: String },
     city: { type: String },
     state: { type: String },
