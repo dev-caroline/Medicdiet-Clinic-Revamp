@@ -12,9 +12,12 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const port = process.env.PORT || 3600;
-const uri = process.env.URI;
+const URI = process.env.URI;
 
-mongoose.connect(uri)
+mongoose.connect(URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
     .then(() => {
         console.log('Mongodb connected');
     })
@@ -23,9 +26,11 @@ mongoose.connect(uri)
     });
 
 
-app.get('/form', (req, res) => {
-    res.sendFile(path.join(__dirname, '/form'));
+
+app.get("/form", (req, res) => {
+    res.json({ status: "successfully sent" , res});
 });
+
 
 
 
