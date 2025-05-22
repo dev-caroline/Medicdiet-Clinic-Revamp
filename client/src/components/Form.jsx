@@ -558,7 +558,7 @@ const Form = () => {
                     <button type="button" className="btn btn-dark px-4 py-2" onClick={handleBack}>
                         Back
                     </button>
-                    <button type="submit" className="btn btn-warning px-4 py-2 hover: btn-dark">
+                    <button type="submit" className="btn btn-warning px-4 py-2 hover:btn-dark">
                         Submit
                     </button>
                 </div>
