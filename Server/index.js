@@ -1,15 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const FormData = require('./model/FormData');
 const punycode = require('punycode/');
 require('dotenv').config();
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
+
 
 const port = process.env.PORT || 3600;
 const URI = process.env.URI;
@@ -116,7 +116,8 @@ app.post('/form', async (req, res) => {
         await transporter.sendMail(mailOptions);
         console.log('Email sent successfully!');
         console.log(req.body);
-        res.status(200).json({ message: 'Form submitted and email sent successfully!', data: formData });
+        res.status(200).json({ message: 'Form submitted and email sent successfully!', data: formData.toJSON() });
+
 
     } catch (error) {
         console.error(error);
