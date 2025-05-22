@@ -28,8 +28,9 @@ mongoose.connect(URI, {
 
 
 app.get("/form", (req, res) => {
-    res.json({ status: "successfully sent" , res});
+    res.json({ status: "successfully sent" });
 });
+
 
 
 
