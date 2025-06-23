@@ -21,5 +21,4 @@ function NavMenu() {
     );
 }
 
-
-export default NavMenu
+export default NavMenu;
