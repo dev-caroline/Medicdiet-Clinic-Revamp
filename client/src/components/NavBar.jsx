@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 function NavMenu() {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -18,3 +20,6 @@ function NavMenu() {
         </nav>
     );
 }
+
+
+export default NavMenu

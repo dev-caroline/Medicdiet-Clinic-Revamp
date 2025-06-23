@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { Helmet } from 'react-helmet-async';
 
 import Preloader from '../components/Preloader';  // Import the Preloader component
 import Hero from '../components/Hero';
@@ -37,10 +38,22 @@ const LandingPage = () => {
   }, [isLoaded]);
 
   return (
-    <div>
+    <>
+      <Helmet>
+        <title>Medicdiet Clinic | Nutrition & Diet Experts</title>
+        <meta name="description" content="Medicdiet Clinic offers expert nutrition and diet consultation for a healthier lifestyle. Book your appointment today!" />
+        <meta property="og:title" content="Medicdiet Clinic | Nutrition & Diet Experts" />
+        <meta property="og:description" content="Medicdiet Clinic offers expert nutrition and diet consultation for a healthier lifestyle. Book your appointment today!" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://yourdomain.com/" />
+        <meta property="og:image" content="/public/images/Logo.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Medicdiet Clinic | Nutrition & Diet Experts" />
+        <meta name="twitter:description" content="Medicdiet Clinic offers expert nutrition and diet consultation for a healthier lifestyle. Book your appointment today!" />
+        <meta name="twitter:image" content="/public/images/Logo.jpg" />
+      </Helmet>
       {/* Show preloader until content is ready */}
       <Preloader onLoaded={handleLoaded} />
-
       <Header />
       <main>
         <Hero />
@@ -55,7 +68,7 @@ const LandingPage = () => {
         <Contact />
       </main>
       <Footer />
-    </div>
+    </>
   );
 };
 
