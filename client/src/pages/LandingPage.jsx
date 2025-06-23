@@ -41,16 +41,17 @@ const LandingPage = () => {
     <>
       <Helmet>
         <title>Medicdiet Clinic | Nutrition & Diet Experts</title>
+        <link rel="canonical" href="https://www.medicdietclinic.com/" />
         <meta name="description" content="Medicdiet Clinic offers expert nutrition and diet consultation for a healthier lifestyle. Book your appointment today!" />
         <meta property="og:title" content="Medicdiet Clinic | Nutrition & Diet Experts" />
         <meta property="og:description" content="Medicdiet Clinic offers expert nutrition and diet consultation for a healthier lifestyle. Book your appointment today!" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://yourdomain.com/" />
-        <meta property="og:image" content="/public/images/Logo.jpg" />
+        <meta property="og:url" content="https://www.medicdietclinic.com/" />
+        <meta property="og:image" content="/images/Logo.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Medicdiet Clinic | Nutrition & Diet Experts" />
         <meta name="twitter:description" content="Medicdiet Clinic offers expert nutrition and diet consultation for a healthier lifestyle. Book your appointment today!" />
-        <meta name="twitter:image" content="/public/images/Logo.jpg" />
+        <meta name="twitter:image" content="/images/Logo.jpg" />
       </Helmet>
       {/* Show preloader until content is ready */}
       <Preloader onLoaded={handleLoaded} />
