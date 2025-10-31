@@ -80,16 +80,19 @@ const Form = () => {
         setIsLoading(true);
 
         try {
+            console.log('Submitting form data:', formData);
             const response = await axios.post('https://medicdietclinic-backendd.onrender.com/form', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
 
+            console.log('Response:', response);
+
             if (response.status === 200 || response.status === 201) {
-                toast.success('Form submitted successfully!', {
+                toast.success('Form submitted successfully! We will contact you soon.', {
                     position: "top-center",
-                    autoClose: 3000,
+                    autoClose: 5000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -139,13 +142,17 @@ const Form = () => {
 
                 setTimeout(() => {
                     navigate('/');
-                }, 4000);
+                }, 5000);
             }
         } catch (error) {
             console.error('Error submitting the form:', error);
-            toast.error('Error submitting the form. Please try again.', {
+            console.error('Error details:', error.response?.data || error.message);
+            
+            const errorMessage = error.response?.data?.message || error.message || 'Error submitting the form. Please try again.';
+            
+            toast.error(errorMessage, {
                 position: "top-center",
-                autoClose: 3000,
+                autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,

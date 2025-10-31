@@ -43,11 +43,22 @@ app.get("/form", (req, res) => {
 });
 app.post('/form', async (req, res) => {
     try {
+        console.log('Received form submission:', req.body);
+        
         const formData = new FormData(req.body);
         await formData.save();
+        console.log('Form data saved to database');
 
         const emailUser = process.env.EMAIL_USER || process.env.USER;
         const emailPass = process.env.EMAIL_PASS || process.env.PASS;
+
+        console.log('Email User:', emailUser ? 'SET' : 'NOT SET');
+        console.log('Email Pass:', emailPass ? 'SET' : 'NOT SET');
+
+        if (!emailUser || !emailPass) {
+            console.error('⚠️ WARNING: Email credentials not configured properly!');
+            console.error('Please set EMAIL_USER and EMAIL_PASS environment variables');
+        }
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -56,6 +67,8 @@ app.post('/form', async (req, res) => {
                 pass: emailPass
             }
         });
+
+        console.log('Attempting to send email from:', emailUser);
 
         const mailOptions = {
             from: process.env.EMAIL_USER || process.env.USER,
@@ -123,22 +136,32 @@ app.post('/form', async (req, res) => {
         };
 
         // Send response immediately after saving to DB
-        res.status(200).json({ message: 'Form submitted successfully!', data: formData.toJSON() });
+        res.status(200).json({ 
+            message: 'Form submitted successfully! We will contact you soon.', 
+            data: formData.toJSON() 
+        });
 
         // Send email asynchronously (don't block the response)
         transporter.sendMail(mailOptions)
-            .then(() => {
-                console.log('Email sent successfully!');
+            .then((info) => {
+                console.log('✅ Email sent successfully!');
+                console.log('Message ID:', info.messageId);
+                console.log('Recipients:', mailOptions.to);
             })
             .catch((emailError) => {
-                console.error('Error sending email:', emailError);
+                console.error('❌ Email send failed!');
+                console.error('Error:', emailError.message);
+                console.error('Error code:', emailError.code);
             });
 
-        console.log(req.body);
+        console.log('Form submission completed');
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Something went wrong", error: error.message });
+        console.error('Server error:', error);
+        res.status(500).json({ 
+            message: "Failed to submit form. Please try again.", 
+            error: error.message 
+        });
     }
 });
 
