@@ -27,7 +27,7 @@ const About = () => {
             <p>
               At Medic Diet, we believe in starting small to create big impacts. As a new and growing organization, we are committed to building a community rooted in health, compassion, and empowerment. Every consultation and interaction is designed to bring you closer to a balanced, thriving lifestyle.
             </p>
-            <a href="#" className="read-more"><span>Learn More About Us</span><i className="bi bi-arrow-right"></i></a>
+            <a href="#about" className="read-more"><span>Learn More About Us</span><i className="bi bi-arrow-right"></i></a>
           </div>
         </div>
       </div>

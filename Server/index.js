@@ -8,11 +8,24 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+// app.use(cors());
+app.use(cors({
+  origin: "*",  // or "*" to allow all
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 
 
-const port = process.env.PORT || 3600;
-const URI = process.env.URI;
+// normalize PORT to number and provide a default
+const port = process.env.PORT ? Number(process.env.PORT) : 3600;
+
+// Support multiple env var names for Mongo connection string (URI or MONGO_URI)
+const URI = process.env.URI || process.env.MONGO_URI;
+
+// Debugging help: show which env variables are present (don't print secrets)
+console.log('Server is starting...');
+console.log('PORT from env:', process.env.PORT ? process.env.PORT : '(not set)');
+console.log('Mongo URI present:', !!URI);
 
 mongoose.connect(URI, {
     useNewUrlParser: true,
@@ -25,31 +38,27 @@ mongoose.connect(URI, {
         console.log(err);
     });
 
-
-
 app.get("/form", (req, res) => {
     res.json({ status: "successfully sent" });
 });
-
-
-
-
-
 app.post('/form', async (req, res) => {
     try {
         const formData = new FormData(req.body);
         await formData.save();
 
+        const emailUser = process.env.EMAIL_USER || process.env.USER;
+        const emailPass = process.env.EMAIL_PASS || process.env.PASS;
+
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: process.env.USER,
-                pass: process.env.PASS
+                user: emailUser,
+                pass: emailPass
             }
         });
 
         const mailOptions = {
-            from: process.env.EMAIL_USER,
+            from: process.env.EMAIL_USER || process.env.USER,
             to: 'carolineajiboye12@gmail.com, medicdietclinic@gmail.com',
             subject: 'New Patient Form Submitted',
             text: `New form submission from ${formData.firstName} ${formData.lastName}.`,
@@ -113,20 +122,25 @@ app.post('/form', async (req, res) => {
 
         };
 
-        await transporter.sendMail(mailOptions);
-        console.log('Email sent successfully!');
-        console.log(req.body);
-        res.status(200).json({ message: 'Form submitted and email sent successfully!', data: formData.toJSON() });
+        // Send response immediately after saving to DB
+        res.status(200).json({ message: 'Form submitted successfully!', data: formData.toJSON() });
 
+        // Send email asynchronously (don't block the response)
+        transporter.sendMail(mailOptions)
+            .then(() => {
+                console.log('Email sent successfully!');
+            })
+            .catch((emailError) => {
+                console.error('Error sending email:', emailError);
+            });
+
+        console.log(req.body);
 
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Something went wrong", error: error.message });
     }
 });
-
-
-
 
 app.listen(port, () => {
     console.log(`Server is running at: ${port}`);

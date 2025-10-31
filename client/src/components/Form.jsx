@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify'; // ✅ import toastify
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 
 const Form = () => {
-    const navigate = useNavigate(); // ✅ initialize navigat
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -74,10 +75,9 @@ const Form = () => {
         }
     };
 
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         try {
             const response = await axios.post('https://medicdietclinic-backendd.onrender.com/form', formData, {
@@ -138,7 +138,7 @@ const Form = () => {
                 });
 
                 setTimeout(() => {
-                    navigate('/'); // ✅ redirect back to landing after 3 sec
+                    navigate('/');
                 }, 4000);
             }
         } catch (error) {
@@ -152,23 +152,23 @@ const Form = () => {
                 draggable: true,
                 progress: undefined,
             });
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const handleBack = () => {
-        navigate('/'); 
+        navigate('/');
     };
 
-
     return (
-        <div className="container">
-                    <ToastContainer />
-            <form onSubmit={handleSubmit} className="form-card p-4 rounded-3 mt-0" >
-                <h2 className="text-center mb-5 fw-bold" style={{ color: "black", textDecorationLine:'underline' }}>Welcome to Your Nutrition Consultation!</h2>
-
-                {/* Personal Information Section */}
-                <div className="section mb-4 p-4">
-                    <h4 className="mb-3" style={{ color: "black" }}>Personal Information</h4>
+        <>
+            <ToastContainer />
+            <form onSubmit={handleSubmit}>
+                <div className="section mb-4">
+                    <h4 className="mb-4 fw-bold" style={{ color: "#0c4b6e", borderBottom: "3px solid #FDC61C", paddingBottom: "10px" }}>
+                        <i className="bi bi-person-circle me-2"></i>Personal Information
+                    </h4>
                     <div className="row">
                         <div className="col-md-6 mb-3">
                             <input
@@ -289,9 +289,10 @@ const Form = () => {
                     />
                 </div>
 
-                {/* Health & Medical History Section */}
-                <div className="section mb-4 p-4">
-                    <h4 className="mb-3" style={{ color: "black" }}>Health & Medical History</h4>
+                <div className="section mb-4">
+                    <h4 className="mb-4 fw-bold" style={{ color: "#0c4b6e", borderBottom: "3px solid #FDC61C", paddingBottom: "10px" }}>
+                        <i className="bi bi-heart-pulse me-2"></i>Health & Medical History
+                    </h4>
                     <input
                         type="number"
                         className="form-control shadow-sm mb-3"
@@ -424,9 +425,10 @@ const Form = () => {
                     />
                 </div>
 
-                {/* Lifestyle & Dietary Habits Section */}
-                <div className="section mb-4 p-4">
-                    <h4 className="mb-3" style={{ color: "black" }}>Lifestyle & Dietary Habits</h4>
+                <div className="section mb-4">
+                    <h4 className="mb-4 fw-bold" style={{ color: "#0c4b6e", borderBottom: "3px solid #FDC61C", paddingBottom: "10px" }}>
+                        <i className="bi bi-egg-fried me-2"></i>Lifestyle & Dietary Habits
+                    </h4>
                     <select
                         className="form-select shadow-sm mb-3"
                         name="physicalActivityLevel"
@@ -476,9 +478,10 @@ const Form = () => {
                     />
                 </div>
 
-                {/* Stress, Sleep, and Mental Health Section */}
-                <div className="section mb-4 p-4">
-                    <h4 className="mb-3" style={{ color: "black" }}>Stress & Mental Health</h4>
+                <div className="section mb-4">
+                    <h4 className="mb-4 fw-bold" style={{ color: "#0c4b6e", borderBottom: "3px solid #FDC61C", paddingBottom: "10px" }}>
+                        <i className="bi bi-emoji-smile me-2"></i>Stress & Mental Health
+                    </h4>
                     <select
                         className="form-select shadow-sm mb-3"
                         name="stressLevel"
@@ -500,9 +503,10 @@ const Form = () => {
                     />
                 </div>
 
-                {/* Family History Section */}
-                <div className="section mb-4 p-4">
-                    <h4 className="mb-3" style={{ color: "black" }}>Family Health History</h4>
+                <div className="section mb-4">
+                    <h4 className="mb-4 fw-bold" style={{ color: "#0c4b6e", borderBottom: "3px solid #FDC61C", paddingBottom: "10px" }}>
+                        <i className="bi bi-people me-2"></i>Family Health History
+                    </h4>
                     <div className="form-check">
                         <input
                             type="checkbox"
@@ -541,9 +545,10 @@ const Form = () => {
                     </div>
                 </div>
 
-                {/* Additional Notes Section */}
-                <div className="section mb-4 p-4">
-                    <h4 className="mb-3" style={{ color: "black" }}>Additional Notes</h4>
+                <div className="section mb-4">
+                    <h4 className="mb-4 fw-bold" style={{ color: "#0c4b6e", borderBottom: "3px solid #FDC61C", paddingBottom: "10px" }}>
+                        <i className="bi bi-chat-left-text me-2"></i>Additional Notes
+                    </h4>
                     <textarea
                         className="form-control shadow-sm mb-3"
                         rows="4"
@@ -554,16 +559,25 @@ const Form = () => {
                     />
                 </div>
 
-                <div className="d-flex justify-content-between">
-                    <button type="button" className="btn btn-dark px-4 py-2" onClick={handleBack}>
-                        Back
+                <div className="d-flex justify-content-between mt-4 pt-3" style={{ borderTop: "2px solid #e0e0e0" }}>
+                    <button type="button" className="btn btn-outline-dark px-5 py-3 fw-bold" onClick={handleBack} disabled={isLoading} style={{ fontSize: "1.1rem" }}>
+                        <i className="bi bi-arrow-left me-2"></i>Back
                     </button>
-                    <button type="submit" className="btn btn-warning px-4 py-2 hover:btn-dark">
-                        Submit
+                    <button type="submit" className="btn px-5 py-3 fw-bold" disabled={isLoading} style={{ backgroundColor: "#FDC61C", color: "#000", fontSize: "1.1rem", border: "none" }}>
+                        {isLoading ? (
+                            <>
+                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                Submitting...
+                            </>
+                        ) : (
+                            <>
+                                <i className="bi bi-send me-2"></i>Submit Form
+                            </>
+                        )}
                     </button>
                 </div>
             </form>
-        </div>
+        </>
     );
 };
 
