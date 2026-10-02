@@ -39,7 +39,7 @@ const Testimonials = () => {
           <div className="swiper-wrapper">
             <div className="swiper-slide">
               <div className="testimonial-item">
-                <img src='images/WhatsApp Image 2025-01-02 at 09.17.44_4a3a9a8a.jpg' className="testimonial-img" alt="Testimonial" />
+                <img src='images/o9vjvp61v96ftrmwliqw.jpg' className="testimonial-img" alt="Testimonial" />
                 <h3 className="text-dark">Oluwasegun Glory Abiodun</h3>
                 <h4>Ceo &amp; Founder</h4>
                 <div className="stars">

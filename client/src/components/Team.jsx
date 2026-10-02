@@ -13,7 +13,7 @@ const Team = () => {
           <div className="col-lg-6 ms-lg-5 mx-1" data-aos="fade-up" data-aos-delay="100" style={{ backgroundColor: 'black' }}>
             <div className="team-member d-flex align-items-start">
               <div className="pic">
-                <img src= 'images/WhatsApp Image 2025-01-02 at 09.17.44_4a3a9a8a.jpg' className="img-fluid" alt="Team Member" />
+                <img src= 'images/o9vjvp61v96ftrmwliqw.jpg' className="img-fluid" alt="Team Member" />
               </div>
               <div className="member-info">
                 <h4 className="text-dark">Oluwasegun Glory Abiodun</h4>
